@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Beauty Shop</title>
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+</head>
+<body>
+    <h1>Наша Косметика</h1>
+
+    <!-- Search bar -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <form method="get" action="/" class="search-form">
+            {% if request.GET.brand %}
+                <input type="hidden" name="brand" value="{{ request.GET.brand }}">
+            {% endif %}
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ query }}"
+                placeholder="Поиск по названию, бренду..." 
+                class="search-input"
+            >
+            <button type="submit" class="search-btn">>>></button>
+        </form>
+    </div>
+
+    <!-- Brand filter -->
+    <div class="brand-menu" style="text-align: center; margin-bottom: 30px;">
+        <a href="/" class="brand-link">Все бренды</a>
+        {% for brand in brands %}
+        <a href="/?brand={{ brand }}" class="brand-link">{{ brand }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Cart link -->
+    <div style="text-align: right; margin-bottom: 15px; padding-right: 20px;">
+        <a href="{% url 'cart_detail' %}" class="btn-back" style="border-radius: 10px;">
+            Корзина
+        </a>
+    </div>
+
+    <div class="container">
+        {% for product in items %}
+            <div class="product-card">
+                <a href="{% url 'product_detail' pk=product.pk %}">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="product-image">
+                    {% else %}
+                    <div class="product-image">
+                        <span>Нет фото</span>
+                    </div>
+                    {% endif %}
+                </a>
+
+                <div class="brand">{{ product.brand }}</div>
+                <h3>
+                    <a href="{% url 'product_detail' pk=product.pk %}" style="text-decoration: none; color: #333;">
+                        {{ product.name }}
+                    </a>
+                </h3>
+                <p class="description">{{ product.description|truncatewords:10 }}</p>
+                <div class="price">{{ product.price }} сом</div>
+
+                <a href="{% url 'cart_add' pk=product.pk %}" class="btn-cart">
+                    + В корзину
+                </a>
+            </div>
+        {% empty %}
+            <p style="text-align:center; color:#999;">Ничего не найдено</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

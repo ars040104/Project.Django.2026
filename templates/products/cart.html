@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+</head>
+<body>
+    <a href="{% url 'product_list' %}" class="btn-back">← Назад к списку</a>
+
+    <h1>Корзина</h1>
+
+    {% if cart_items %}
+    <div style="max-width: 700px; margin: 0 auto;">
+        {% for item in cart_items %}
+        <div class="cart-row">
+            {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" class="cart-img">
+            {% endif %}
+
+            <div style="flex: 1;">
+                <h3 style="margin: 0;">{{ item.product.name }}</h3>
+                <p style="color: #aaa; margin: 4px 0;">{{ item.product.brand }}</p>
+                <p style="color: #d81b60; font-weight: bold;">{{ item.product.price }} сом × {{ item.quantity }} = {{ item.subtotal }} сом</p>
+            </div>
+
+            <a href="{% url 'cart_remove' pk=item.product.pk %}" class="btn-remove">✕</a>
+        </div>
+        {% endfor %}
+
+        <div style="text-align: right; margin-top: 30px;">
+            <h2>Итого: <span style="color: #d81b60;">{{ total }} сом</span></h2>
+            <a href="{% url 'cart_clear' %}" class="btn-back" style="margin-right: 10px;">Очистить корзину</a>
+            <button class="btn-cart" style="font-size: 1em; padding: 10px 30px;">Оформить заказ</button>
+        </div>
+    </div>
+
+    {% else %}
+        <p style="text-align: center; color: #999; margin-top: 50px;">Корзина пуста</p>
+    {% endif %}
+</body>
+</html>

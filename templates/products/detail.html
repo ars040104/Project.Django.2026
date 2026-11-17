@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.name }}</title>
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+</head>
+<body>
+    <a href="{% url 'product_list' %}" class="btn-back">← Назад к списку</a>
+
+    <div style="display: flex; gap: 40px; margin-top: 20px;">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" style="width: 400px; border-radius: 20px;">
+        {% endif %}
+
+        <div>
+            <h1>{{ product.name }}</h1>
+            <p><strong>Бренд:</strong> {{ product.brand }}</p>
+            <p>{{ product.description }}</p>
+            <h2 style="color: #d81b60;">{{ product.price }} сом</h2>
+
+            <a href="{% url 'cart_add' pk=product.pk %}" class="btn-cart" style="font-size: 1em;">
+                + Добавить в корзину
+            </a>
+        </div>
+    </div>
+</body>
+</html>
